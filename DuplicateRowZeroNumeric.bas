@@ -1,4 +1,3 @@
-Attribute VB_Name = "Module1"
 Sub DuplicateRowZeroNumeric()
     Dim ws As Worksheet
     Dim buttonRow As Long
@@ -8,27 +7,22 @@ Sub DuplicateRowZeroNumeric()
     Dim i As Long
     Dim cell As Range
     Dim debugMsg As String
+    Dim buttonName As String
     
     ' Set the worksheet to the active sheet
     Set ws = ActiveSheet
     
-    ' Determine the button row by finding the active shape (button)
-    Dim sh As Shape
-    Dim foundButton As Boolean
-    foundButton = False
+    ' Determine which button was clicked
+    buttonName = Application.Caller
     
-    For Each sh In ws.Shapes
-        If sh.Type = msoPicture Or sh.Type = msoFormControl Then
-            ' Calculate the row of the button
-            buttonRow = Int((sh.TopLeftCell.Row + sh.BottomRightCell.Row) / 2)
-            foundButton = True
-            Exit For
-        End If
-    Next sh
+    ' Find the button's row
+    On Error Resume Next
+    buttonRow = ws.Shapes(buttonName).TopLeftCell.Row
+    On Error GoTo 0
     
-    ' If no button found, exit the macro
-    If Not foundButton Then
-        MsgBox "Please place the cursor on or near the button", vbExclamation
+    ' If the button row cannot be determined, exit the macro
+    If buttonRow = 0 Then
+        MsgBox "Unable to determine the button's row. Please ensure the button is properly placed.", vbExclamation
         Exit Sub
     End If
     
@@ -69,6 +63,7 @@ Sub DuplicateRowZeroNumeric()
     
     ' Extend sum formulas in the row below the button (buttonRow)
     debugMsg = "Debug Information:" & vbNewLine
+    debugMsg = debugMsg & "Button Name: " & buttonName & vbNewLine
     debugMsg = debugMsg & "Button Row: " & buttonRow & vbNewLine
     debugMsg = debugMsg & "Last Column: " & lastCol & vbNewLine
     
@@ -126,14 +121,13 @@ Sub DuplicateRowZeroNumeric()
             On Error GoTo 0
             
             ' Add final formula to debug message
-            ' debugMsg = debugMsg & "Final Formula: " & sumFormulaCell.Formula & vbNewLine & vbNewLine
+            debugMsg = debugMsg & "Final Formula: " & sumFormulaCell.Formula & vbNewLine & vbNewLine
         End If
     Next i
     
     ' Display debug information
-    MsgBox debugMsg
+    ' MsgBox debugMsg
     
     ' Optional: Select the first cell of the new row
     ws.Cells(targetRow, 1).Select
 End Sub
-
