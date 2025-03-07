@@ -51,12 +51,12 @@ Sub DuplicateRowZeroNumeric()
         End If
     Next i
     
-    ' Zero out only numeric cells, preserving blank and text cells
+    ' Zero out only hardcoded numeric cells, preserving formulas, blank, and text cells
     For i = 1 To lastCol
         Set cell = ws.Cells(targetRow, i)
         
-        ' Check if the cell has a numeric value (ignore blank or text cells)
-        If IsNumeric(cell.Value) And cell.Value <> "" Then
+        ' Check if the cell does NOT contain a formula and has a numeric value
+        If Not cell.HasFormula And IsNumeric(cell.Value) And cell.Value <> "" Then
             cell.Value = 0
         End If
     Next i
