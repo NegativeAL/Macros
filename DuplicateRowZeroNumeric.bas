@@ -49,7 +49,7 @@ Sub DuplicateRowZeroNumeric()
         ' Copy the cell's formula if it has one, otherwise copy its value
         If cell.HasFormula Then
             ' Simulate cut and paste to adjust relative references
-            cell.Cut Destination:=ws.Cells(targetRow, i)
+            cell.Copy Destination:=ws.Cells(targetRow, i)
         Else
             ws.Cells(targetRow, i).Value = cell.Value
         End If
