@@ -44,10 +44,13 @@ Sub DuplicateRowZeroNumeric()
     
     ' Copy cells from the source row to the new row
     For i = 1 To lastCol
-        ' Check if the cell in the source row exists
-        If Not IsEmpty(ws.Cells(sourceRow, i)) Then
-            ' Copy the cell to the new row
-            ws.Cells(targetRow, i).Value = ws.Cells(sourceRow, i).Value
+        Set cell = ws.Cells(sourceRow, i)
+        
+        ' Copy the cell's formula if it has one, otherwise copy its value
+        If cell.HasFormula Then
+            ws.Cells(targetRow, i).Formula = cell.Formula
+        Else
+            ws.Cells(targetRow, i).Value = cell.Value
         End If
     Next i
     
