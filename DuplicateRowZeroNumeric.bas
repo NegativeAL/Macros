@@ -48,10 +48,8 @@ Sub DuplicateRowZeroNumeric()
         
         ' Copy the cell's formula if it has one, otherwise copy its value
         If cell.HasFormula Then
-            ' Adjust the formula to account for the new row
-            Dim adjustedFormula As String
-            adjustedFormula = Application.ConvertFormula(cell.Formula, xlA1, xlA1, xlRelative)
-            ws.Cells(targetRow, i).Formula = adjustedFormula
+            ' Simulate cut and paste to adjust relative references
+            cell.Cut Destination:=ws.Cells(targetRow, i)
         Else
             ws.Cells(targetRow, i).Value = cell.Value
         End If
